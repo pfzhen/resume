@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		 <div id="list">111
+		 </div>
+	</body>
+	<script>
+
+		ajax({
+	 	url:'http://localhost:8000/user/list',
+	 	type:'post',
+	 	success:function(da){
+	 		list.innerHTML = da
+	 	},
+	 	error:function(){
+
+	 	}
+	 })
+
+
+
+function ajax(req){
+//	console.log(req.data)
+	if(window.XMLHttpRequest){
+				var ajax = new XMLHttpRequest()
+	}else{
+				var ajax = new ActiveXObject( "Microsoft.XMLHTTP" );
+		}
+	if(req.type == 'get'){
+		ajax.open('get',req.url+'?'+strdata(req.data),true)
+		ajax.send()
+	}else{
+		ajax.open('post',req.url,true)
+		ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+		ajax.send(strdata(req.data))
+	}
+		ajax.onreadystatechange = function(){
+			if(ajax.readyState == 4){
+				if(ajax.status>=200 && ajax.status<300 || ajax.status == 304){
+					req.success(ajax.responseText)
+//					console.log(ajax.responseText)
+				}else{
+					req.error(ajax.status)
+				}
+
+			}
+		}
+
+    function strdata(da){
+    	  var arr = []
+	   for(var i in da){
+		arr.push(i+'='+da[i])
+	  }
+	   var strurl = arr.join('&')
+	   return strurl
+    }
+}
+	</script>
+</html>

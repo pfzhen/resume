@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="css/index.css"/>
+	</head>
+	<body>
+	<div class="big">
+		<h1>著名招聘网站</h1>
+		 <div style="display: block;text-align: center; padding-top: 30px; padding-bottom: 20px;">user :  <input type="text" id="user"/><br></div>
+		<div style="display: block;text-align: center;"> pass :  <input type="text" id="pass" /><br></div>
+		<button id="btn">登录</button>
+		<button id="btn1">注册</button>
+	</div>
+	</body>
+	<script>
+	btn.onclick = function(){
+		ajax({
+	 	url:'http://localhost:8000/user/login',
+	 	type:'post',
+	 	data:{
+			user:user.value,
+			pass:pass.value
+	 	},
+	 	success:function(da){
+	 		if(da == '用户名或密码不对'){
+				alert('用户名或密码不对')
+			}else{
+				if(da == '用户名不存在'){
+					alert('用户名不存在')
+				}else{
+					window.open(da)
+				}
+
+			}
+	 	},
+	 	error:function(){
+	 		
+	 	}
+	 })
+	}
+	 btn1.onclick = function(){
+		ajax({
+	 	url:'http://localhost:8000/user/login2',
+	 	type:'post',
+	 	data:{
+	 		user:user.value,
+	 		pass:pass.value
+	 	},
+	 	success:function(da){
+//	 		alert(da)
+			if(da == '用户名以存在'){
+				alert('用户名以存在')
+			}else{
+					window.open(da)
+				}
+
+	 		
+	 	},
+	 	error:function(){
+	 		
+	 	}
+	 })
+	}
+	 
+function ajax(req){
+//	console.log(req.data)
+	if(window.XMLHttpRequest){
+				var ajax = new XMLHttpRequest()
+	}else{
+				var ajax = new ActiveXObject( "Microsoft.XMLHTTP" );
+		}
+	if(req.type == 'get'){
+		ajax.open('get',req.url+'?'+strdata(req.data),true)
+		ajax.send()
+	}else{
+		ajax.open('post',req.url,true)
+		ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+		ajax.send(strdata(req.data))
+	}
+		ajax.onreadystatechange = function(){
+	 		if(ajax.readyState == 4){
+				if(ajax.status>=200 && ajax.status<300 || ajax.status == 304){
+					req.success(ajax.responseText)
+//					console.log(ajax.responseText)
+				}else{
+					req.error(ajax.status)
+				}
+				
+			}
+		};
+
+    function strdata(da){
+        var arr = []
+        for(var i in da){
+            arr.push(i+'='+da[i])
+        }
+        var strurl = arr.join('&')
+        return strurl
+    }
+}
+	</script>
+</html>
